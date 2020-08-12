@@ -159,6 +159,7 @@ if __name__ == "__main__":
         # https://www.immersivelimit.com/tutorials/create-coco-annotations-from-scratch/#coco-dataset-format
         segments_data = { 'info': { 'description': "Fade segmentation", "version": "0.9" }}
         segments_data['categories'] = {}
+        segments_data['annotations'] = []
         for prediction_thing, vis_frame in tqdm.tqdm(demo.run_on_video(video), total=num_frames):
             # if args.output:
             output_file.write(vis_frame)
