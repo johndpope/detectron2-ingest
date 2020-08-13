@@ -163,6 +163,7 @@ if __name__ == "__main__":
         for prediction_thing, vis_frame in tqdm.tqdm(demo.run_on_video(video), total=num_frames):
             # if args.output:
             output_file.write(vis_frame)
+            print(json.dumps(prediction_thing))
             segments_data['annotations'].append(prediction_thing)
             # else:
             #     cv2.namedWindow(basename, cv2.WINDOW_NORMAL)
