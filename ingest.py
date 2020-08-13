@@ -1,10 +1,13 @@
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 import argparse
+import cv2
 import glob
+import json
+from json import JSONEncoder
 import multiprocessing as mp
+import numpy
 import os
 import time
-import cv2
 import tqdm
 
 from detectron2.config import get_cfg
@@ -20,9 +23,6 @@ WINDOW_NAME = "COCO detections"
 ## Argh
 ## https://pynative.com/python-serialize-numpy-ndarray-into-json/
 ##
-import numpy
-from json import JSONEncoder
-import json
 
 class NumpyArrayEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -163,7 +163,6 @@ if __name__ == "__main__":
         for prediction_thing, vis_frame in tqdm.tqdm(demo.run_on_video(video), total=num_frames):
             # if args.output:
             output_file.write(vis_frame)
-            print(json.dumps(prediction_thing))
             segments_data['annotations'].append(prediction_thing)
             # else:
             #     cv2.namedWindow(basename, cv2.WINDOW_NORMAL)

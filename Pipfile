@@ -1,0 +1,21 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+torch = "==1.5"
+torchvision = "==0.6"
+cython = "*"
+pyyaml = "==5.1"
+opencv-python = "3.4"
+detectron2 = {git = "https://github.com/facebookresearch/detectron2.git"}
+tqdm = "*"
+fvcore = {git = "https://github.com/facebookresearch/fvcore.git"}
+pycocotools = "*"
+cloudpickle = "*"
+
+[requires]
+python_version = "3.7"
