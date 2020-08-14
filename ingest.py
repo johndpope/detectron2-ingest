@@ -135,11 +135,7 @@ if __name__ == "__main__":
         video.release()
         if args.output:
             with open(output_fname+".pt", 'w') as segments_file:
-                print(segments_data.keys())
-                print(type(segments_data['info']))
-                print(segments_data['info'])
-                print(type(segments_data['annotations']))
-                print(type(segments_data['annotations'][0]))
+                print(type(segments_data['categories']))
                 print(segments_data['annotations'][0])
                 #json.dumps(segments_data, segments_file, indent=2, cls=NumpyArrayEncoder)
                 #torch.save(segments_data, segments_file)
