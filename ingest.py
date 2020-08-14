@@ -22,9 +22,10 @@ from predictor_fade import VisualizationDemo
 WINDOW_NAME = "COCO detections"
 
 ########
-## Argh
-## https://pynative.com/python-serialize-numpy-ndarray-into-json/
+# Argh
+# https://pynative.com/python-serialize-numpy-ndarray-into-json/
 ##
+
 
 class NumpyArrayEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -53,7 +54,8 @@ def setup_cfg(args):
 
 
 def get_parser():
-    parser = argparse.ArgumentParser(description="Detectron2-based Video Ingest System for FADE for builtin models")
+    parser = argparse.ArgumentParser(
+        description="Detectron2-based Video Ingest System for FADE for builtin models")
     parser.add_argument(
         "--config-file",
         default="configs/quick_schedules/mask_rcnn_R_50_FPN_inference_acc_test.yaml",
@@ -87,6 +89,7 @@ def get_parser():
     )
     return parser
 
+
 if __name__ == "__main__":
     mp.set_start_method("spawn", force=True)
     args = get_parser().parse_args()
@@ -96,7 +99,9 @@ if __name__ == "__main__":
 
     cfg = setup_cfg(args)
     demo = VisualizationDemo(cfg)
-    metadata = MetadataCatalog.get(cfg.DATASETS.TEST[0] if len(cfg.DATASETS.TEST) else "__unused"
+    metadata = MetadataCatalog.get(
+        cfg.DATASETS.TEST[0] if len(cfg.DATASETS.TEST) else "__unused"
+    )
     thing_classes = metadata.thing_classes
 
     if args.video_input:
@@ -123,7 +128,8 @@ if __name__ == "__main__":
             )
         assert os.path.isfile(args.video_input)
         # https://www.immersivelimit.com/tutorials/create-coco-annotations-from-scratch/#coco-dataset-format
-        segments_data = { 'info': { 'description': "Fade segmentation", "version": "0.9" }}
+        segments_data = {
+            'info': {'description': "Fade segmentation", "version": "0.9"}}
         segments_data['categories'] = {}
         segments_data['annotations'] = []
         for instance, vis_frame in tqdm.tqdm(demo.run_on_video(video), total=num_frames):
@@ -140,6 +146,7 @@ if __name__ == "__main__":
             with open(output_fname+".pt", 'w') as segments_file:
                 print(thing_classes)
                 print(segments_data['annotations'][0])
+                print(segments_data[0].get('bounding_boxes'))
                 #json.dumps(segments_data, segments_file, indent=2, cls=NumpyArrayEncoder)
                 #torch.save(segments_data, segments_file)
             output_file.release()
