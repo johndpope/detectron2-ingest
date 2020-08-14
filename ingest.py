@@ -10,6 +10,7 @@ import os
 import time
 import tqdm
 import torch
+from detectron2.data import MetadataCatalog
 
 from detectron2.config import get_cfg
 from detectron2.data.detection_utils import read_image
@@ -95,6 +96,8 @@ if __name__ == "__main__":
 
     cfg = setup_cfg(args)
     demo = VisualizationDemo(cfg)
+    metadata = MetadataCatalog.get(cfg.DATASETS.TEST[0] if len(cfg.DATASETS.TEST) else "__unused"
+    thing_classes = metadata.thing_classes
 
     if args.video_input:
         video = cv2.VideoCapture(args.video_input)
@@ -123,10 +126,10 @@ if __name__ == "__main__":
         segments_data = { 'info': { 'description': "Fade segmentation", "version": "0.9" }}
         segments_data['categories'] = {}
         segments_data['annotations'] = []
-        for prediction_thing, vis_frame in tqdm.tqdm(demo.run_on_video(video), total=num_frames):
+        for instance, vis_frame in tqdm.tqdm(demo.run_on_video(video), total=num_frames):
             # if args.output:
             output_file.write(vis_frame)
-            segments_data['annotations'].append(prediction_thing)
+            segments_data['annotations'].append(instance)
             # else:
             #     cv2.namedWindow(basename, cv2.WINDOW_NORMAL)
             #     cv2.imshow(basename, vis_frame)
@@ -135,8 +138,7 @@ if __name__ == "__main__":
         video.release()
         if args.output:
             with open(output_fname+".pt", 'w') as segments_file:
-                print(type(segments_data['categories']))
-                print(segments_data['categories'])
+                print(thing_classes)
                 print(segments_data['annotations'][0])
                 #json.dumps(segments_data, segments_file, indent=2, cls=NumpyArrayEncoder)
                 #torch.save(segments_data, segments_file)

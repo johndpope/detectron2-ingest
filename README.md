@@ -20,3 +20,4 @@ Other links:
 
 * [Detectron2 Beginner's Tutorial](https://colab.research.google.com/drive/16jcaJoc6bCFAQ96jDe2HwtXj7BMD_-m5)
 * [Detectron2 Model Output Format](https://detectron2.readthedocs.io/tutorials/models.html#model-output-format)
+* [Detectron2 instances structure documentation](https://detectron2.readthedocs.io/_modules/detectron2/structures/instances.html)
