@@ -1,0 +1,23 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "ingest.py",
+      "type": "python",
+      "request": "launch",
+      "program": "ingest.py",
+      "args": [
+        "--config-file", "configs/mask_rcnn_R_101_FPN_3x.yaml",
+        "--video-input", "videos/high_fidelity.proc.mp4",
+        "--confidence-threshold", "0.6",
+        "--output", "models/",
+        "--opts", "MODEL.WEIGHTS",
+        "detectron2://COCO-InstanceSegmentation/mask_rcnn_R_101_FPN_3x/138205316/model_final_a3ec72.pkl"
+      ],
+      "console": "integratedTerminal"
+    }
+  ]
+}
