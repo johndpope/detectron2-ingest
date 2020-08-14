@@ -31,8 +31,7 @@ class custom_encoder(json.JSONEncoder):
         elif isinstance(obj, (datetime.date, datetime.datetime)):
             return obj.isoformat()
         else:
-            return super(NumpyArrayEncoder, self).default(obj)
-########
+            return super(custom_encoder, self).default(obj)
 
 
 def setup_cfg(args):
@@ -84,6 +83,7 @@ def get_parser():
     )
     return parser
 
+
 def scale_box(box):
     bx = box.numpy().tolist()
     bx[0] = bx[0]/width
@@ -91,6 +91,7 @@ def scale_box(box):
     bx[2] = bx[2]/width
     bx[3] = bx[3]/height
     return bx
+
 
 if __name__ == "__main__":
     mp.set_start_method("spawn", force=True)
@@ -129,45 +130,43 @@ if __name__ == "__main__":
             )
         assert os.path.isfile(args.video_input)
         # https://www.immersivelimit.com/tutorials/create-coco-annotations-from-scratch/#coco-dataset-format
-        segments_data = {
-            'info': {'description': "Fade segmentation", "version": "0.9"}}
-        segments_data['categories'] = {}
-        segments_data['annotations'] = []
+
+        segments = []
+        
         for instance, vis_frame in tqdm.tqdm(demo.run_on_video(video), total=num_frames):
-            # if args.output:
             output_file.write(vis_frame)
-            segments_data['annotations'].append(instance)
-            # else:
-            #     cv2.namedWindow(basename, cv2.WINDOW_NORMAL)
-            #     cv2.imshow(basename, vis_frame)
-            #     if cv2.waitKey(1) == 27:
-            #         break  # esc to quit
+            segments.append(instance)
         video.release()
+
         if args.output:
             with open(output_fname + ".json", 'w') as segments_file:
-                for i,instance in enumerate(segments_data['annotations']):
+                for i,instance in enumerate(segments):
                     obj = {}
 
-                    # only include header in first row
+                    # only include header in first row (to avoid having to keep everything in memory before writing)
                     if i == 0:
                         obj['version'] = VERSION
                         obj['date'] = datetime.datetime.now()
-                        obj['source_file'] = args.video_input
+                        obj['source_file'] = video
+                        obj['number_frames'] = len(segments)
+                        obj['fps'] = frames_per_second
+                        obj['width'] = width
+                        obj['height'] = height
 
                     obj['t'] = i/frames_per_second
                     obj['objects'] = []
 
                     to_cpu = instance.to('cpu')
 
-                    pred_classes = to_cpu.pred_classes
+                    classes = to_cpu.pred_classes
                     scores = to_cpu.scores
-                    pred_boxes = to_cpu.pred_boxes.tensor
+                    boxes = to_cpu.pred_boxes.tensor
 
                     for j in range(0,len(pred_classes)):
                         obj['objects'].append({
-                            'class': thing_classes[pred_classes[j]],
+                            'class': thing_classes[classes[j]],
                             'score': scores[j].numpy(),
-                            'box': scale_box(pred_boxes[j,:])
+                            'box': scale_box(boxes[j,:])
                         })
 
                     #print(json.dumps(obj, cls=custom_encoder))
