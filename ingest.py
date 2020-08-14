@@ -155,9 +155,9 @@ if __name__ == "__main__":
                         obj['objects'].append({
                             'class': thing_classes[pred_classes[j]],
                             'score': scores[j],
-                            'box': pred_boxes[j]
+                            'box': pred_boxes[j].numpy()
                         })
-                        print(json.dumps(obj))
+                        print(json.dumps(obj, cls=NumpyArrayEncoder))
 
                         json.dumps(obj, segments_file, indent=2, cls=NumpyArrayEncoder)
             output_file.release()
