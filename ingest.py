@@ -20,7 +20,7 @@ from predictor_fade import VisualizationDemo
 VERSION = '0.9'
 
 
-class NumpyArrayEncoder(json.JSONEncoder):
+class custom_encoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, numpy.integer):
             return int(obj)
@@ -28,6 +28,8 @@ class NumpyArrayEncoder(json.JSONEncoder):
             return float(obj)
         elif isinstance(obj, numpy.ndarray):
             return obj.tolist()
+        elif isinstance(obj, (datetime.date, datetime.datetime)):
+            return obj.isoformat()
         else:
             return super(NumpyArrayEncoder, self).default(obj)
 ########
@@ -165,6 +167,6 @@ if __name__ == "__main__":
                             'box': scale_box(pred_boxes[j,:])
                         })
 
-                    print(json.dumps(obj, cls=NumpyArrayEncoder))
-                    json.dump(obj, segments_file, indent=2, cls=NumpyArrayEncoder)
+                    print(json.dumps(obj, cls=custom_encoder))
+                    json.dump(obj, segments_file, indent=2, cls=custom_encoder)
             output_file.release()
