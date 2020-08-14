@@ -154,7 +154,7 @@ if __name__ == "__main__":
                         obj['date'] = datetime.datetime.now()
                         obj['source_file'] = args.video_input
 
-                    obj['t'] = i/frames_per_second)
+                    obj['t'] = i/frames_per_second
                     obj['objects'] = []
 
                     to_cpu = instance.to('cpu')
