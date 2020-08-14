@@ -144,7 +144,8 @@ if __name__ == "__main__":
         if args.output:
             with open(output_fname+".json", 'w') as segments_file:
                 for i,instance in enumerate(segments_data['annotations']):
-                    obj = {"t": (i/frames_per_second), 'objects': [])
+                    obj = { "t": i/frames_per_second } 
+                    obj.objects = []
                     to_cpu = instance.to('cpu')
 
                     pred_classes = to_cpu.pred_classes
