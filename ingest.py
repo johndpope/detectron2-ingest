@@ -1,13 +1,13 @@
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
 import argparse
 import cv2
+import datetime
 import glob
 import json
 from json import JSONEncoder
 import multiprocessing as mp
 import numpy
 import os
-import time
 import tqdm
 from detectron2.data import MetadataCatalog
 
@@ -17,13 +17,7 @@ from detectron2.utils.logger import setup_logger
 
 from predictor_fade import VisualizationDemo
 
-# constants
-WINDOW_NAME = "COCO detections"
-
-########
-# Argh
-# https://pynative.com/python-serialize-numpy-ndarray-into-json/
-##
+VERSION = '0.9'
 
 
 class NumpyArrayEncoder(json.JSONEncoder):
@@ -54,7 +48,7 @@ def setup_cfg(args):
 
 def get_parser():
     parser = argparse.ArgumentParser(
-        description="Detectron2-based Video Ingest System for FADE for builtin models")
+        description="Detectron2-based Video Ingest System for FADE for built-in models")
     parser.add_argument(
         "--config-file",
         default="configs/quick_schedules/mask_rcnn_R_50_FPN_inference_acc_test.yaml",
@@ -88,6 +82,13 @@ def get_parser():
     )
     return parser
 
+def scale_box(box):
+    bx = box.numpy().tolist()
+    bx[0] = bx[0]/width
+    bx[1] = bx[1]/height
+    bx[2] = bx[2]/width
+    bx[3] = bx[3]/height
+    return bx
 
 if __name__ == "__main__":
     mp.set_start_method("spawn", force=True)
@@ -115,7 +116,6 @@ if __name__ == "__main__":
             if os.path.isdir(args.output):
                 output_fname = os.path.join(args.output, basename)
                 output_fname = os.path.splitext(output_fname)[0] + ".mkv"
-            #assert not os.path.isfile(output_fname), output_fname
             output_file = cv2.VideoWriter(
                 filename=output_fname,
                 # some installation of opencv may not support x264 (due to its license),
@@ -142,9 +142,16 @@ if __name__ == "__main__":
             #         break  # esc to quit
         video.release()
         if args.output:
-            with open(output_fname+".json", 'w') as segments_file:
+            with open(output_fname + ".json", 'w') as segments_file:
                 for i,instance in enumerate(segments_data['annotations']):
                     obj = { "t": (i/frames_per_second), 'objects': [] } 
+
+                    # include header in first row
+                    if i == 0:
+                        obj['version'] = VERSION
+                        obj['date'] = datetime.datetime.now()
+                        obj['source_file'] = args.video_input
+
                     to_cpu = instance.to('cpu')
 
                     pred_classes = to_cpu.pred_classes
@@ -155,9 +162,9 @@ if __name__ == "__main__":
                         obj['objects'].append({
                             'class': thing_classes[pred_classes[j]],
                             'score': scores[j].numpy(),
-                            'box': pred_boxes[j,:].numpy().tolist()
+                            'box': scale_box(pred_boxes[j,:])
                         })
-                        
+
                     print(json.dumps(obj, cls=NumpyArrayEncoder))
                     json.dump(obj, segments_file, indent=2, cls=NumpyArrayEncoder)
             output_file.release()

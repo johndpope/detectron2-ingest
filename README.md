@@ -18,6 +18,8 @@ Since MacOS comes with python 2.7.3 by default we also need to upgrade locally t
 
 Other links:
 
+* [Detrectron2 on GitHub](https://github.com/facebookresearch/detectron2)
 * [Detectron2 Beginner's Tutorial](https://colab.research.google.com/drive/16jcaJoc6bCFAQ96jDe2HwtXj7BMD_-m5)
 * [Detectron2 Model Output Format](https://detectron2.readthedocs.io/tutorials/models.html#model-output-format)
 * [Detectron2 instances structure documentation](https://detectron2.readthedocs.io/_modules/detectron2/structures/instances.html)
+* [Detectron2 Metadata for Datasets](https://detectron2.readthedocs.io/tutorials/datasets.html#metadata-for-datasets)
