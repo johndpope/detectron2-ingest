@@ -146,13 +146,16 @@ if __name__ == "__main__":
         if args.output:
             with open(output_fname + ".json", 'w') as segments_file:
                 for i,instance in enumerate(segments_data['annotations']):
-                    obj = { "t": (i/frames_per_second), 'objects': [] } 
+                    obj = {}
 
-                    # include header in first row
+                    # only include header in first row
                     if i == 0:
                         obj['version'] = VERSION
                         obj['date'] = datetime.datetime.now()
                         obj['source_file'] = args.video_input
+
+                    obj['t'] = i/frames_per_second)
+                    obj['objects'] = []
 
                     to_cpu = instance.to('cpu')
 
@@ -167,6 +170,6 @@ if __name__ == "__main__":
                             'box': scale_box(pred_boxes[j,:])
                         })
 
-                    print(json.dumps(obj, cls=custom_encoder))
+                    #print(json.dumps(obj, cls=custom_encoder))
                     json.dump(obj, segments_file, indent=2, cls=custom_encoder)
             output_file.release()
