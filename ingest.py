@@ -134,6 +134,8 @@ if __name__ == "__main__":
             #         break  # esc to quit
         video.release()
         if args.output:
-            with open(output_fname+".json", 'w') as segments_file:
-                pickle.dump(segments_data, segments_file, indent=2, cls=NumpyArrayEncoder)
+            with open(output_fname+".pickle", 'w') as segments_file:
+
+                #json.dumps(segments_data, segments_file, indent=2, cls=NumpyArrayEncoder)
+                pickle.dump(segments_data, segments_file)
             output_file.release()
