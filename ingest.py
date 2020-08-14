@@ -154,7 +154,7 @@ if __name__ == "__main__":
                     for j in range(0,len(pred_classes)):
                         obj['objects'].append({
                             'class': thing_classes[pred_classes[j]],
-                            'score': scores[j],
+                            'score': scores[j].numpy(),
                             'box': pred_boxes[j,:].numpy()
                         })
                         print(obj)
