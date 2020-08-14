@@ -9,7 +9,7 @@ import numpy
 import os
 import time
 import tqdm
-import pickle
+import torch
 
 from detectron2.config import get_cfg
 from detectron2.data.detection_utils import read_image
