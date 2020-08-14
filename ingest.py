@@ -143,11 +143,17 @@ if __name__ == "__main__":
             #         break  # esc to quit
         video.release()
         if args.output:
-            with open(output_fname+".pt", 'w') as segments_file:
-                print(thing_classes)
-                print(segments_data['annotations'][0])
-                print(segments_data[0].to("cpu").pred_boxes.tensor)
-                print(segments_data[0].to("cpu"").pred_classes)
+            #with open(output_fname+".pt", 'w') as segments_file:
+            print(json.dumps(metadata.thing_classes))
+            for instance in segments_data['annotations']:
+                to_cpu = instance.to('cpu')
+                pred_classes = to_cpu.pred_classes
+                scores = to_cpu.scores
+                pred_boxes = to_cpu.pred_boxes.tensor
+                print(json.dumps(pred_classes.numpy(), cls=NumpyArrayEncoder))
+                print(json.dumps(scores.numpy(), cls=NumpyArrayEncoder))
+                print(json.dumps(pred_boxes.numpy(), cls=NumpyArrayEncoder))
+
                 #json.dumps(segments_data, segments_file, indent=2, cls=NumpyArrayEncoder)
                 #torch.save(segments_data, segments_file)
             output_file.release()
