@@ -134,8 +134,8 @@ if __name__ == "__main__":
             #         break  # esc to quit
         video.release()
         if args.output:
-            with open(output_fname+".pickle", 'w') as segments_file:
+            with open(output_fname+".pt", 'w') as segments_file:
 
                 #json.dumps(segments_data, segments_file, indent=2, cls=NumpyArrayEncoder)
-                pickle.dump(segments_data, segments_file)
+                torch.save(segments_data, segments_file)
             output_file.release()
