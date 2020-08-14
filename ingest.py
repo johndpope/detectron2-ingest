@@ -144,8 +144,7 @@ if __name__ == "__main__":
         if args.output:
             with open(output_fname+".json", 'w') as segments_file:
                 for i,instance in enumerate(segments_data['annotations']):
-                    obj = { "t": i/frames_per_second } 
-                    obj.objects = []
+                    obj = { "t": (i/frames_per_second), 'objects': [] } 
                     to_cpu = instance.to('cpu')
 
                     pred_classes = to_cpu.pred_classes
@@ -153,7 +152,7 @@ if __name__ == "__main__":
                     pred_boxes = to_cpu.pred_boxes.tensor
 
                     for j in range(0,len(pred_classes)):
-                        obj.objects.append({
+                        obj['objects'].append({
                             'class': thing_classes[pred_classes[j]],
                             'score': scores[j],
                             'box': pred_boxes[j]
