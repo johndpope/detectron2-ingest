@@ -157,7 +157,8 @@ if __name__ == "__main__":
                             'score': scores[j],
                             'box': pred_boxes[j,:].numpy()
                         })
-                        print(json.dumps(obj, cls=NumpyArrayEncoder))
+                        print(obj)
+                        #print(json.dumps(obj, cls=NumpyArrayEncoder))
 
-                        json.dumps(obj, segments_file, indent=2, cls=NumpyArrayEncoder)
+                        #json.dumps(obj, segments_file, indent=2, cls=NumpyArrayEncoder)
             output_file.release()
