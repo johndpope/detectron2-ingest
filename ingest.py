@@ -146,8 +146,8 @@ if __name__ == "__main__":
             with open(output_fname+".pt", 'w') as segments_file:
                 print(thing_classes)
                 print(segments_data['annotations'][0])
-                print(segments_data[0].to(“cpu”).pred_boxes.tensor)
-                print(segments_data[0].to(“cpu”).pred_classes)
+                print(segments_data[0].to("cpu").pred_boxes.tensor)
+                print(segments_data[0].to("cpu"").pred_classes)
                 #json.dumps(segments_data, segments_file, indent=2, cls=NumpyArrayEncoder)
                 #torch.save(segments_data, segments_file)
             output_file.release()
