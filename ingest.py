@@ -136,7 +136,7 @@ if __name__ == "__main__":
         if args.output:
             with open(output_fname+".pt", 'w') as segments_file:
                 print(type(segments_data['categories']))
-                print(segments_data['categories'].keys())
+                print(segments_data['categories'])
                 print(segments_data['annotations'][0])
                 #json.dumps(segments_data, segments_file, indent=2, cls=NumpyArrayEncoder)
                 #torch.save(segments_data, segments_file)
