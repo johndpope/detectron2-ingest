@@ -155,7 +155,7 @@ if __name__ == "__main__":
                         obj['objects'].append({
                             'class': thing_classes[pred_classes[j]],
                             'score': scores[j],
-                            'box': pred_boxes[j].numpy()
+                            'box': pred_boxes[j,:].numpy()
                         })
                         print(json.dumps(obj, cls=NumpyArrayEncoder))
 
