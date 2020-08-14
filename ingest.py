@@ -9,7 +9,6 @@ import numpy
 import os
 import time
 import tqdm
-import torch
 from detectron2.data import MetadataCatalog
 
 from detectron2.config import get_cfg
@@ -143,17 +142,22 @@ if __name__ == "__main__":
             #         break  # esc to quit
         video.release()
         if args.output:
-            #with open(output_fname+".pt", 'w') as segments_file:
-            print(json.dumps(metadata.thing_classes))
-            for instance in segments_data['annotations']:
-                to_cpu = instance.to('cpu')
-                pred_classes = to_cpu.pred_classes
-                scores = to_cpu.scores
-                pred_boxes = to_cpu.pred_boxes.tensor
-                print(json.dumps(pred_classes.numpy(), cls=NumpyArrayEncoder))
-                print(json.dumps(scores.numpy(), cls=NumpyArrayEncoder))
-                print(json.dumps(pred_boxes.numpy(), cls=NumpyArrayEncoder))
+            with open(output_fname+".json", 'w') as segments_file:
+                for i,instance in enumerate(segments_data['annotations']):
+                    obj = {"t": (i/frames_per_second), 'objects': [])
+                    to_cpu = instance.to('cpu')
 
-                #json.dumps(segments_data, segments_file, indent=2, cls=NumpyArrayEncoder)
-                #torch.save(segments_data, segments_file)
+                    pred_classes = to_cpu.pred_classes
+                    scores = to_cpu.scores
+                    pred_boxes = to_cpu.pred_boxes.tensor
+
+                    for j in range(0,len(pred_classes)):
+                        obj.objects.append({
+                            'class': thing_classes[pred_classes[j]],
+                            'score': scores[j],
+                            'box': pred_boxes[j]
+                        })
+                        print(json.dumps(obj))
+
+                        json.dumps(obj, segments_file, indent=2, cls=NumpyArrayEncoder)
             output_file.release()
