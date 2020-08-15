@@ -154,23 +154,25 @@ if __name__ == "__main__":
                 segments_file.write(', "frames": [\n')
 
                 for i,instance in enumerate(segments):
-                    obj = {'t': i/frames_per_second, 'objects': []}
-
                     to_cpu = instance.to('cpu')
                     classes = to_cpu.pred_classes
-                    scores = to_cpu.scores
-                    boxes = to_cpu.pred_boxes.tensor
 
-                    for j in range(0,len(classes)):
-                        obj['objects'].append({
-                            'class': thing_classes[classes[j]],
-                            'score': scores[j].numpy(),
-                            'box': scale_box(boxes[j,:])
-                        })
+                    # only write anything if we have at least one identified object in the frame
+                    if len(classes) > 0:
+                        obj = {'t': i/frames_per_second, 'objects': []}
+                        scores = to_cpu.scores
+                        boxes = to_cpu.pred_boxes.tensor
 
-                    #print(json.dumps(obj, cls=custom_encoder))
-                    json.dump(obj, segments_file, indent=2, cls=custom_encoder)
-                    if i<len(segments)-1:
-                        segments_file.write(',\n')
+                        for j in range(0,len(classes)):
+                            obj['objects'].append({
+                                'class': thing_classes[classes[j]],
+                                'score': scores[j].numpy(),
+                                'box': scale_box(boxes[j,:])
+                            })
+
+                        #print(json.dumps(obj, cls=custom_encoder))
+                        json.dump(obj, segments_file, indent=2, cls=custom_encoder)
+                        if i<len(segments)-1:
+                            segments_file.write(',\n')
                 segments_file.write(']}')
             output_file.release()
