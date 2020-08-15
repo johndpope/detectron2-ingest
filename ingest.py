@@ -154,16 +154,9 @@ if __name__ == "__main__":
                 segments_file.write(', "data": [\n')
 
                 for i,instance in enumerate(segments):
-                    obj = {}
-
-                    # only include header in first row (to avoid having to keep everything in memory before writing)
-                    if i == 0:
-
-                    obj['t'] = i/frames_per_second
-                    obj['objects'] = []
+                    obj = {'t': i/frames_per_second, 'objects': []}
 
                     to_cpu = instance.to('cpu')
-
                     classes = to_cpu.pred_classes
                     scores = to_cpu.scores
                     boxes = to_cpu.pred_boxes.tensor
