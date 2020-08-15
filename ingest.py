@@ -162,7 +162,7 @@ if __name__ == "__main__":
                     scores = to_cpu.scores
                     boxes = to_cpu.pred_boxes.tensor
 
-                    for j in range(0,len(pred_classes)):
+                    for j in range(0,len(classes)):
                         obj['objects'].append({
                             'class': thing_classes[classes[j]],
                             'score': scores[j].numpy(),
