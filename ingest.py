@@ -172,5 +172,5 @@ if __name__ == "__main__":
                     json.dump(obj, segments_file, indent=2, cls=custom_encoder)
                     if i<len(segments)-1:
                         segments_file.write(',\n')
-            segments_file.write(']}')
+                segments_file.write(']}')
             output_file.release()
