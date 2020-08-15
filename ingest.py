@@ -150,7 +150,7 @@ if __name__ == "__main__":
                     'width': width,
                     'height': height
                 }
-                json.dump(header, segments_file, indent=2)
+                json.dump(header, segments_file, indent=2, cls=custom_encoder)
                 segments_file.write(', "data": [\n')
 
                 for i,instance in enumerate(segments):
