@@ -140,18 +140,24 @@ if __name__ == "__main__":
 
         if args.output:
             with open(output_fname + ".json", 'w') as segments_file:
+                segments_file.write('{ "header": ')
+                header = {
+                    'version': VERSION,
+                    'date': datetime.datetime.now(),
+                    'source_file': args.video_input,
+                    'number_frames': len(segments),
+                    'fps': frames_per_second
+                    'width': width,
+                    'height': height
+                }
+                json.dump(header, segments_file, indent=2)
+                segments_file.write(', "data": [\n')
+
                 for i,instance in enumerate(segments):
                     obj = {}
 
                     # only include header in first row (to avoid having to keep everything in memory before writing)
                     if i == 0:
-                        obj['version'] = VERSION
-                        obj['date'] = datetime.datetime.now()
-                        obj['source_file'] = args.video_input
-                        obj['number_frames'] = len(segments)
-                        obj['fps'] = frames_per_second
-                        obj['width'] = width
-                        obj['height'] = height
 
                     obj['t'] = i/frames_per_second
                     obj['objects'] = []
@@ -171,4 +177,7 @@ if __name__ == "__main__":
 
                     #print(json.dumps(obj, cls=custom_encoder))
                     json.dump(obj, segments_file, indent=2, cls=custom_encoder)
+                    if i<len(segments)-1:
+                        segments_file.write(',\n')
+            segments_file.write(']}')
             output_file.release()
