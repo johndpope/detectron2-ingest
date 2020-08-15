@@ -146,7 +146,7 @@ if __name__ == "__main__":
                     'date': datetime.datetime.now(),
                     'source_file': args.video_input,
                     'number_frames': len(segments),
-                    'fps': frames_per_second
+                    'fps': frames_per_second,
                     'width': width,
                     'height': height
                 }
