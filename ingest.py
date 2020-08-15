@@ -151,7 +151,7 @@ if __name__ == "__main__":
                     'height': height
                 }
                 json.dump(header, segments_file, indent=2, cls=custom_encoder)
-                segments_file.write(', "data": [\n')
+                segments_file.write(', "frames": [\n')
 
                 for i,instance in enumerate(segments):
                     obj = {'t': i/frames_per_second, 'objects': []}
