@@ -147,7 +147,7 @@ if __name__ == "__main__":
                     if i == 0:
                         obj['version'] = VERSION
                         obj['date'] = datetime.datetime.now()
-                        obj['source_file'] = video
+                        obj['source_file'] = args.video_input
                         obj['number_frames'] = len(segments)
                         obj['fps'] = frames_per_second
                         obj['width'] = width
